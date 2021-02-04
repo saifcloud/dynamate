@@ -8,9 +8,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       jobsite_name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       jobsite_location: {
         type: Sequelize.STRING,

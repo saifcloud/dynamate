@@ -9,11 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate({User}) {
       // define association here
+      this.hasOne(User,{foreignKey:'id',sourceKey:'assigned_project_manager',as:'assigned_manager'});
     }
   };
   Jobsite.init({
+    user_id:DataTypes.INTEGER,
     jobsite_name: DataTypes.STRING,
     jobsite_location: DataTypes.STRING,
     lat:DataTypes.STRING,

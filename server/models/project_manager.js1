@@ -1,0 +1,32 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Project_manager extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  };
+  Project_manager.init({
+    image: DataTypes.STRING,
+    login_id: DataTypes.STRING,
+    name: DataTypes.STRING,
+    assigned_by: DataTypes.INTEGER,
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    site_id: DataTypes.INTEGER,
+    status: DataTypes.INTEGER,
+    is_deleted: DataTypes.INTEGER
+  }, {
+    sequelize,
+    tableName:'project_managers',
+    modelName: 'Project_manager',
+  });
+  return Project_manager;
+};

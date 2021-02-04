@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 
 const saltRounds = 10;
-const {sequelize, User} = require('../models');
+const {sequelize, User,Category,Size} = require('../models');
 
 
 
@@ -33,7 +33,7 @@ router.post('/register',async(req, res)=>{
   
     
     const hash = bcrypt.hashSync(password, saltRounds);
-    const user = await User.create({fullname,username,email,phone,password:hash});
+    const user = await User.create({fullname,username,email,phone,password:hash,type:1});
     const token = jwt.sign({user_id:user.id},'sssshhhhh');
     
 
@@ -48,16 +48,56 @@ router.post('/register',async(req, res)=>{
 
 //login
 router.post('/login',async(req,res) => {
-  const {username,password} = req.body;
+
+  const {username,password,type} = req.body;
+
+  if(!username) return res.json({status:false,message:'username is required.'});
+  if(!password) return res.json({status:false,message:'password is required.'});
+  // if(!type) return res.json({status:false,message:'type is required.'});
+
  try{
    
    const user = await User.findOne({where:{username:username,is_deleted:0}});
+   
    if(!user) return res.json({status:false,message:'Username and passoword does not matched.'});
-   var token = jwt.sign({ user_id:user.id }, 'sssshhhhh');
-   return res.json({status:true,data:{token:token},message:'Login successfully'})
+   const match = await bcrypt.compare(password, user.password);
+ 
+    if(match) {
+      var token = jwt.sign({ user_id:user.id }, 'sssshhhhh');
+      return res.json({status:true,data:{token:token,type:user.type},message:'Login successfully'})
+    }
+    
+  return res.json({status:false,message:'Username and passoword does not matched.'});
+  
  }catch(err){
    return res.json({status:false,message:'Something is wrong.'});
  }
+});
+
+
+//get category
+router.get('/category',async(req,res) =>{
+  try{
+    const category = await Category.findAll({status:1,is_deleted:0});
+    return res.json({status:true,data:{category:category},message:'categories'})
+  }catch(err){
+    console.log(err)
+    return res.json({status:false,message:'Something is wrong.'});
+  }
+});
+
+
+
+
+//get size
+router.get('/size',async(req,res) =>{
+  try{
+    const size = await Size.findAll({status:1,is_deleted:0});
+    return res.json({status:true,data:{size:size},message:'categories'})
+  }catch(err){
+    console.log(err)
+    return res.json({status:false,message:'Something is wrong.'});
+  }
 });
 
 module.exports = router;

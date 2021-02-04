@@ -10,7 +10,7 @@ module.exports = {
       },
       image: {
         type: Sequelize.STRING,
-        defaultValue:'default.png'
+        defaultValue:'/user/default.png'
       },
       fullname: {
         type: Sequelize.STRING,
@@ -30,6 +30,14 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
         allowNull:false
+      },
+      type: {
+        type: Sequelize.INTEGER,
+        comment:"1=>main user ,2=>project manager"
+      },
+      created_by:{
+        type: Sequelize.INTEGER,
+        defaultValue:0
       },
       forget_password: {
         type: Sequelize.INTEGER
